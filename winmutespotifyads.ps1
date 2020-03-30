@@ -1,6 +1,3 @@
-# run loop to check every 1 second if Spotify Ads are present, and if the system should be muted
-while ($true)
-{
 # this section checks to see if the [Audio] type is defined, if not, it gets defined here
 if (-not [System.Management.Automation.PSTypeName]'Audio'.Type)
 {
@@ -51,11 +48,15 @@ public class Audio {
 '@
 }
 
-
+# run loop to check every 1 second if Spotify Ads are present, and if the system should be muted
+while ($true)
+{
+# check if spotify is even open
+if (Get-Process Spotify -ErrorAction SilentlyContinue) {
 # This section uses the above defined Type [Audio] to mute or unmute the system if Spotify Advertisement is detected
-if ($(Get-Process | Where-Object {$_.mainWindowTitle} | Format-Table mainWindowtitle -AutoSize | grep -m 1 'Advertisement\|Spotify') -And (-Not([Audio]::mute))) {[Audio]::mute = $true}
-elseif (-Not($(Get-Process | Where-Object {$_.mainWindowTitle} | Format-Table mainWindowtitle -AutoSize | grep -m 1 'Advertisement\|Spotify')) -And ([Audio]::mute)) {[Audio]::mute = $false}
-
+if ((Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.mainWindowTitle} | Format-Table mainWindowtitle | grep -m 1 'Advertisement\|Spotify') -And (-Not([Audio]::mute))) {[Audio]::mute = $true}
+elseif (-Not(Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.mainWindowTitle} | Format-Table mainWindowtitle | grep -m 1 'Advertisement\|Spotify') -And ([Audio]::mute)) {[Audio]::mute = $false}
+}
 
 # pause this program for 1 second, then check for Spotify ads again
 Start-Sleep -s 1
