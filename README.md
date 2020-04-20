@@ -15,6 +15,6 @@ This works well in Ubuntu Studio 19.10.
 
 The PowerShell script "winmutespotifyads.ps1" checks for Spotify ads every 1 second within a while loop.
 
-Register "winmutespotifyads.ps1" PowerShell script as a Windows 10 task by using "Import Task" and selecting the winadfree.xml file in Task Scheduler. It is triggered to start at logon or workstation unlock. When you are importing, be sure to change the file path to the correct location of the mutespotifyads git repo. To do so: navigate to the Actions tab, double-click under the Details field, and change the path to your correct path in the Add Arguments box.
+Register "winmutespotifyads.ps1" PowerShell script as a Windows 10 task by opening Task Scheduler, clicking "Import Task," and selecting the winadfree.xml file. It is triggered to start at logon or workstation unlock. When you are importing the .xml file with the Task Scheduler GUI, be sure to change the file path to the actual correct location of where you downloaded your mutespotifyads git repo. To do so: navigate to the Actions tab, double-click under the Details field, and change the path to your correct path in the Add Arguments box.
 
-In order to start and stop this task manually, open Powershell.exe with Win+X, Win+I or Win+"powershell"+Enter. To start it type "Start-ScheduledTask winadfree"; to stop it type "Stop-ScheduledTask winadfree".
+In order to start and stop this task manually, open Powershell.exe with Win+X, Win+I or Win+"powershell"+Enter. To start it from within PowerShell: type "Start-ScheduledTask winadfree"; to stop it type "Stop-ScheduledTask winadfree".
