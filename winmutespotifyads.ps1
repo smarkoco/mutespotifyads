@@ -1,5 +1,5 @@
 # this section checks to see if the [AppMuter] class is defined, if not, it gets defined here
-if (-not [System.Management.Automation.PSTypeName]'VolumeMixer  '.Type)
+if (-not [System.Management.Automation.PSTypeName]'VolumeMixer'.Type)
 {
 $def = @"
 using System;
