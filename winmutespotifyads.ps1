@@ -220,8 +220,8 @@ while ($true)
 # check if spotify is even open
 if (Get-Process Spotify -ErrorAction SilentlyContinue) {
 # This section uses the above defined Type to mute or unmute the app if Spotify Advertisement is detected
-if ((Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "Spotify|Advertisement") -And (-Not([VolumeMixer]::GetApplicationMute($proc_id)))) {[VolumeMixer]::SetApplicationMute($proc_id,1)}
-elseif (-Not(Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "Spotify|Advertisement") -And ([VolumeMixer]::GetApplicationMute($proc_id))) {[VolumeMixer]::SetApplicationMute($proc_id,0)}
+if (-Not(Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "-") -And (-Not([VolumeMixer]::GetApplicationMute($proc_id)))) {[VolumeMixer]::SetApplicationMute($proc_id,1)}
+elseif ((Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "-") -And ([VolumeMixer]::GetApplicationMute($proc_id))) {[VolumeMixer]::SetApplicationMute($proc_id,0)}
 }
 
 # pause this program for 1 second, then check for Spotify ads again
