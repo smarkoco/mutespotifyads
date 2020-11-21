@@ -209,38 +209,27 @@ internal interface IAudioSessionControl2 {
   int SetDuckingPreference(bool optOut);
 }
 "@;
-Add-Type -TypeDefinition $def -Language CSharpVersion3
+Add-Type -TypeDefinition $def -Lang CSharp
 }
 
-$proc_id_str = Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object Id
-$proc_id = ($proc_id_str  -replace '\D+')
 # run loop to check every 1 second if Spotify Ads are present, and if the system should be muted
 while ($true)
 {
 # check if spotify is even open
 if (Get-Process Spotify -ErrorAction SilentlyContinue) {
+    if (-Not($proc_id)){ # check for first call, to define these variables
+    $proc_id_str = Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object Id
+    $proc_id = ($proc_id_str  -replace '\D+')
+    }
 # This section uses the above defined Type to mute or unmute the app if Spotify Advertisement is detected
 if (-Not(Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "-") -And (-Not([VolumeMixer]::GetApplicationMute($proc_id)))) {[VolumeMixer]::SetApplicationMute($proc_id,1)}
 elseif ((Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "-") -And ([VolumeMixer]::GetApplicationMute($proc_id))) {[VolumeMixer]::SetApplicationMute($proc_id,0)}
 }
+elseif ($proc_id){
+    Clear-Variable -Name proc_id* # clear variables when Spotify is closed
+    exit
+    }
 
 # pause this program for 1 second, then check for Spotify ads again
 Start-Sleep -s 1
 }
-
-
-
-### backup
-# # run loop to check every 1 second if Spotify Ads are present, and if the system should be muted
-# while ($true)
-# {
-# # check if spotify is even open
-# if (Get-Process Spotify -ErrorAction SilentlyContinue) {
-# # This section uses the above defined Type [Audio] to mute or unmute the system if Spotify Advertisement is detected
-# if ((Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "Spotify|Advertisement") -And (-Not([Audio]::mute))) {[Audio]::mute = $true}
-# elseif (-Not(Get-Process Spotify -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle} | Select-Object MainWindowTitle | Select-String -Quiet "Spotify|Advertisement") -And ([Audio]::mute)) {[Audio]::mute = $false}
-# }
-
-# # pause this program for 1 second, then check for Spotify ads again
-# Start-Sleep -s 1
-# }

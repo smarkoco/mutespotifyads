@@ -20,11 +20,11 @@ function mutespotifyads() {
         done
 }
 
-# call this f(x) to start tmux session to run mutespotifyads() in the bg
-function adfree() {
-        tmux new-session -d -s adfree
+# call this func to start tmux session to run mutespotifyads() in the bg
+function adfreeSpotify() {
+        tmux new-session -d -s adfreeSpotify
         tmux send-keys 'mutespotifyads' C-m # C-m sends ENTER keystroke
 }
 
 # execute it
-adfree
+adfreeSpotify
