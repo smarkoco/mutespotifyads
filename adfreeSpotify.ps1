@@ -1,4 +1,4 @@
-Start-Process ~\AppData\Roaming\Spotify\Spotify.exe
+Start-Process $HOME\AppData\Roaming\Spotify\Spotify.exe
 sleep 2
 $wshell = New-Object -ComObject wscript.shell
 $wshell.SendKeys(' ') # press play by sending spacebar to Spotify
