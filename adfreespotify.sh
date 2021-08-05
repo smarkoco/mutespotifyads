@@ -1,16 +1,17 @@
 #!/bin/bash
 # detect ads in spotify, mute when detected, unmute after they are over
-function mutespotifyads() {
+function mutespotifyads(){
 	while true; do
-  	if [[ $(ps -A | grep -m 1 spotify) ]]
+	pid=$(pidof spotify | awk '{print $NF;}')
+  	if [[ $pid ]]
 	then
-      	if [ $(wmctrl -lp | grep $(pidof spotify | awk '{print $NF;}') | grep '-' | wc -l) == 1 ] && [ $(amixer -D pulse | grep "Playback" | grep "off" | wc -l) == 0 ]
+      	if [ $(wmctrl -lp | grep $pid | grep '-' | wc -l) == 1 ] && [ $(amixer -D pulse | grep "Playback" | grep "off" | wc -l) == 0 ]
 		then
         	echo "ad @ " $(date)
 			amixer set -D pulse Master toggle -q
 		fi
 
-		if [ $(wmctrl -lp | grep $(pidof spotify | awk '{print $NF;}') | grep '-' | wc -l) == 0 ] && [ $(amixer -D pulse | grep "Playback" | grep "off" | wc -l) == 2 ]
+		if [ $(wmctrl -lp | grep $pid | grep '-' | wc -l) == 0 ] && [ $(amixer -D pulse | grep "Playback" | grep "off" | wc -l) == 2 ]
 		then
 			echo "noad @ " $(date)
 			amixer set -D pulse Master toggle -q
